@@ -35,9 +35,9 @@ def attach_audio(video_path, audio_path, output_video_path):
     audio_clip.close()
 
 
-dir= 'download_folder'
+# dir= 'download_folder'
 
-downloaded_file_name = get_last_file_in_dir(dir)
-downloaded_file_dir = dir+'\\'+downloaded_file_name
-detached_audio = 'output_folder\\combined_audio.mp3'
-attach_audio(downloaded_file_dir, detached_audio, 'final\\'+downloaded_file_name)
+# downloaded_file_name = get_last_file_in_dir(dir)
+# downloaded_file_dir = dir+'\\'+downloaded_file_name
+# detached_audio = 'output_folder\\combined_audio.mp3'
+# attach_audio(downloaded_file_dir, detached_audio, 'final\\'+downloaded_file_name)

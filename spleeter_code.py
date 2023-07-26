@@ -1,4 +1,4 @@
-from spleeter.separator import Separator
+from spleeter import Separator
 
 # Initialize Spleeter with desired output file names
 separator = Separator('spleeter:2stems')

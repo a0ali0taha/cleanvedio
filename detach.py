@@ -33,8 +33,8 @@ def detach_audio(video_path, output_audio_path):
 # Replace 'input_video.mp4' with the path to your input video file
 # Replace 'output_audio.wav' with the desired path and filename for the output audio
 
-dir= 'download_folder'
-downloaded_file_name = get_last_file_in_dir(dir)
-downloaded_file_dir = dir+'\\'+downloaded_file_name
-detached_audio = 'output\\det.mp3'
-detach_audio(downloaded_file_dir, detached_audio)
+# dir= 'download_folder'
+# downloaded_file_name = get_last_file_in_dir(dir)
+# downloaded_file_dir = dir+'\\'+downloaded_file_name
+# detached_audio = 'output\\det.mp3'
+# detach_audio(downloaded_file_dir, detached_audio)

@@ -2,7 +2,7 @@ import os
 import tkinter as tk
 from tkinter import messagebox, BooleanVar
 from pytube import Playlist, YouTube
-from telegram import Bot
+from telegram_sender import send_to_telegram
 
 
 def download_video(url, output_path='./videos'):
@@ -27,20 +27,10 @@ def download_playlist(url, output_path='./videos', send_to_telegram=False):
             video.streams.get_highest_resolution().download(output_path)
             if send_to_telegram:
                 video_file_path = os.path.join(output_path, f"{video.title}.mp4")
-                send_to_telegram(video_title, video_file_path)
+                asyncio.run(send_to_telegram(video_title, video_file_path)_
         except Exception as e:
             messagebox.showerror("Error", f"Error downloading {video.title}: {e}")
 
-def send_to_telegram(video_title, video_file_path):
-    bot_token = 'YOUR_TELEGRAM_BOT_TOKEN'
-    chat_id = 'YOUR_TELEGRAM_CHAT_ID'
-
-    bot = Bot(token=bot_token)
-
-    try:
-        bot.send_video(chat_id=chat_id, video=open(video_file_path, 'rb'), caption=escape_markdown(video_title))
-    except Exception as e:
-        messagebox.showerror("Error", f"Error sending video to Telegram: {e}")
 
 def download_button_clicked():
     playlist_url = entry_url.get()
