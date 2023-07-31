@@ -7,7 +7,7 @@ from main import start
 
 def download_button_clicked():
     playlist_url = entry_url.get()
-    output_path = entry_output.get()
+    output_path = entry_output.get() or 'newv'
     send_to_telegram_flag = checkbox_telegram_var.get()
     start(playlist_url,checkbox_var.get(),output_path,send_to_telegram_flag)
 
@@ -39,7 +39,7 @@ checkbox_telegram = tk.Checkbutton(window, text="Send to Telegram", variable=che
 checkbox_telegram.pack(pady=5)
 
 btn_download = tk.Button(window, text="Download", command=download_button_clicked)
-btn_download.pack(pady=10)
+btn_download.pack(pady=10)                     
 
 # Start the GUI event loop
 window.mainloop()

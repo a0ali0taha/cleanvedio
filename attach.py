@@ -41,3 +41,4 @@ def attach_audio(video_path, audio_path, output_video_path):
 # downloaded_file_dir = dir+'\\'+downloaded_file_name
 # detached_audio = 'output_folder\\combined_audio.mp3'
 # attach_audio(downloaded_file_dir, detached_audio, 'final\\'+downloaded_file_name)
+# attach_audio('newv\in.mp4','newv\\1\\combined_audio.mp3','final\\newv\\1\\out.mp4')

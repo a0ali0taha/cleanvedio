@@ -1,1 +1,4 @@
 .vscode/launch.json
+__pycache__/
+pretrained_models/
+final/
