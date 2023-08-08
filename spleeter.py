@@ -38,3 +38,4 @@ def separate_vocals_with_spleeter(input_audio_path, output_folder):
 #     # Replace 'input_audio_file.mp3' with the path to your input audio file
 #     # Replace 'output_folder' with the desired output folder path
 #     separate_vocals_with_spleeter(directory_path+'\\'+mp3_file, 'output_folder')
+# separate_vocals_with_spleeter('output\\det.mp3','nnn')

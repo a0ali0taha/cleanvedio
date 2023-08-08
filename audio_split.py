@@ -18,12 +18,14 @@ def split_audio_by_duration(audio_file, segment_duration_ms=550000):
 #     for i, segment in enumerate(segments):
 #         output_file = f"segment_{i+1}.mp3"
 #         segment.export('input_segments\\'+output_file, format="mp3")
-#newv\vtitle.mp3
-def split(input_audio_file):
+##newv\1\vtitle.mp3,newv\1
+def split(input_audio_file,output_path):
     segments = split_audio_by_duration(input_audio_file)
     segments_files=[]
     for i, segment in enumerate(segments):
-        output_file = f"{input_audio_file}_{i+1}"
+        output_file = f"{output_path}\\seg_{i+1}.mp3"
+        #newv\1\seg_1.mp3
         segment.export( output_file, format="mp3")
         segments_files.append(output_file)
     return segments_files
+# split('nemo//2//det.mp3','nemo/2')

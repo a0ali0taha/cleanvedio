@@ -25,9 +25,6 @@ def download_playlist(url, output_path='./videos', send_to_telegram=False):
         try:
             video_title = video.title
             video.streams.get_highest_resolution().download(output_path)
-            if send_to_telegram:
-                video_file_path = os.path.join(output_path, f"{video.title}.mp4")
-                asyncio.run(send_to_telegram(video_title, video_file_path)_
         except Exception as e:
             messagebox.showerror("Error", f"Error downloading {video.title}: {e}")
 
