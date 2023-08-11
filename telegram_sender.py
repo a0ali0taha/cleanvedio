@@ -28,5 +28,5 @@ async def send_video_to_telegram(video_file_path,caption):
         # await app.send_message(chat_id=chat_id,text='test')
 def send_video_to_telegram_in_asyncio(video_file_path,caption):
     asyncio.run(send_video_to_telegram(video_file_path,caption))
-threading.Thread(target=send_video_to_telegram_in_asyncio, args=('F:\\Ahmed\\lab\\scripts\\NoMusic\\cleanvedio\\final\\01.mp4','test')).start()
+# threading.Thread(target=send_video_to_telegram_in_asyncio, args=('F:\\Ahmed\\lab\\scripts\\NoMusic\\cleanvedio\\final\\01.mp4','test')).start()
 # asyncio.run(send_video_to_telegram('F:\\Ahmed\\lab\\scripts\\NoMusic\\cleanvedio\\final\\filename.mp4','test'))
