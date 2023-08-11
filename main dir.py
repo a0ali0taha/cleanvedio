@@ -7,10 +7,9 @@ def start(dir,send_to_telegram):
     # Perform operations on each MP3 file
         filename = os.path.basename(file)
         name, ext = os.path.splitext(filename)
-        output_path=f"nemo\\{i}"
+        output_path=f"{dir}\\{i}"
         video_path=f'{dir}\\{file}'
         handle(output_path,video_path,send_to_telegram)
         i=i+1
 
-
-# start('C:\\Users\\User\\Downloads\\نيمو',True)
+# start('newv',True)

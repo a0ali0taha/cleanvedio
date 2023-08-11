@@ -13,10 +13,10 @@ def start(url,is_playlist = True, output_path='videos',is_send_to_telegram=False
     if is_playlist:
         video_paths=download_playlist(url, output_path)
         for title, file_path in video_paths.items():
-                output_path=f"{output_path}\\{i}"
+                output_path_int=f"{output_path}\\{i}"
                 # Do something with the title and file_path
                 print(f"Video Title: {title}, File Path: {file_path}")
-                handle(output_path,file_path,is_send_to_telegram)#vtitile,newv\1,newv\vtitle.mp4
+                handle(output_path_int,file_path,is_send_to_telegram)#vtitile,newv\1,newv\vtitle.mp4
                 i=i+1
         
     else:
