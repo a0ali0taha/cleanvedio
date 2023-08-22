@@ -39,4 +39,5 @@ python audio_split.py
 python spleeter.py
 python audio_merge.py
 python attach.py
+python process_mp4_files.py
 PAUSE
