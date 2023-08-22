@@ -33,10 +33,7 @@ del /q "%folder_path%\*"
 for /d %%i in ("%folder_path%\*") do (
     rmdir /s /q "%%i"
 )
+set /p dir=Enter the directory: 
 python gui.py
-python detach.py
-python audio_split.py
-python spleeter.py
-python audio_merge.py
-python attach.py
+python all.py %dir%
 PAUSE
