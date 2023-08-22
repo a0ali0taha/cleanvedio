@@ -89,6 +89,23 @@ def attach_audio(video_path, audio_path, output_video_path):
 
 
 import datetime
+import glob
+
+def process_all_videos_in_dir(directory):
+    # Get a list of all mp4 files in the directory
+    mp4_files = glob.glob(os.path.join(directory, "*.mp4"))
+
+    # Process each mp4 file
+    for mp4_file in mp4_files:
+        # Detach audio
+        detached_audio = 'output\\det.wav'
+        detach_audio(mp4_file, detached_audio)
+
+        # Separate vocals with spleeter
+        separate_vocals_with_spleeter(detached_audio, 'output')
+
+        # Attach audio
+        attach_audio(mp4_file, 'output\\det\\vocals.wav', 'final\\' + os.path.basename(mp4_file))
 
 # Get the current date and time
 current_time = datetime.datetime.now()
@@ -104,21 +121,8 @@ print("Current time:", formatted_time)
 dir= 'download_folder'
 download_youtube_video('https://www.youtube.com/watch?v=WcKgqocYukI', dir)
 
-# Replace 'input_video.mp4' with the path to your input video file
-# Replace 'output_audio.wav' with the desired path and filename for the output audio
-# Example usage:
-downloaded_file_name = get_last_file_in_dir(dir)
-downloaded_file_dir = dir+'\\'+downloaded_file_name
-detached_audio = 'output\\det.wav'
-print( downloaded_file_name)
-detach_audio(downloaded_file_dir, detached_audio)
-# Replace 'input_audio_file.mp3' with the path to your input audio file
-# Replace 'output_folder' with the desired output folder path
-separate_vocals_with_spleeter(detached_audio, 'output')
-# Replace 'input_video.mp4' with the path to your input video file
-# Replace 'input_audio.wav' with the path to your detached audio file
-# Replace 'output_video_with_audio.mp4' with the desired path and filename for the output video
-attach_audio(downloaded_file_dir, 'output\\det\\vocals.wav', 'final\\'+downloaded_file_name)
+# Process all videos in the directory
+process_all_videos_in_dir(dir)
 
 current_time = datetime.datetime.now()
 time_format = "%Y-%m-%d %H:%M:%S"  # Year-Month-Day Hour:Minute:Second
