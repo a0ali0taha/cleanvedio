@@ -1,3 +1,8 @@
+
+import cv2
+import numpy as np
+
+<<<< UPDATED
 import cv2
 import numpy as np
 
@@ -47,4 +52,3 @@ def blur_faces_in_video(input_video_path, output_video_path):
     # Release the input and output video files
     input_video.release()
     output_video.release()
-
