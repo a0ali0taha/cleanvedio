@@ -16,7 +16,9 @@ def get_last_file_in_dir(directory):
     # Return the absolute path of the last file
     return last_file
 
-def detach_audio(video_path, output_audio_path):
+def detach_audio(video):
+    video_path=video.input_video_path
+    output_audio_path= video.detached_mp3
     # Load the video clip
     video_clip = VideoFileClip(video_path)
 

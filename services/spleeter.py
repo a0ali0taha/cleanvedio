@@ -19,7 +19,15 @@ def separate_vocals_with_spleeter(input_audio_path, output_folder):
         print("Vocals separated successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Error while calling Spleeter: {e}")
-
+        
+def create_vocals(video):
+    vocals_folder=f'{video.processing_input_folder}\\vocals' #newv\1\vocals
+    vocal_files = []
+    for i,mp3_file in enumerate(video.audio_segments_paths): 
+        vocal_folder_seg=f'{vocals_folder}'#newv\1\vocals
+        separate_vocals_with_spleeter(mp3_file,vocal_folder_seg)
+        vocal_files.append(f'{vocal_folder_seg}\\seg_{i+1}\\vocals.mp3')#newv\1\vocals\seg_1\vocals.mp3, newv\1\vocals\seg_1\vocals.mp3
+    video.vocals_paths=vocal_files
 
 # Replace 'path_to_directory' with the actual path to the directory you want to explore
 # Replace 'path_to_directory' with the actual path to the directory you want to explore

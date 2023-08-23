@@ -17,12 +17,16 @@ def get_last_file_in_dir(directory):
     # Return the absolute path of the last file
     return last_file
 
-def attach_audio(video_path, audio_path, output_video_path):
+def attach_audio(video):
+    video_path = video.input_video_path
+    audio_path = video.output_audio_path
+    output_video_path = video.output_video_path
     # Load the video clip
     video_clip = VideoFileClip(video_path)
 
     # Load the audio clip
     audio_clip = AudioFileClip(audio_path)
+    video.video_duration=int(round(audio_clip.duration))
 
     # Set the audio of the video clip to the loaded audio clip
     video_clip = video_clip.set_audio(audio_clip)
