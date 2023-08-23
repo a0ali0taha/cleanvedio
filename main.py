@@ -2,6 +2,7 @@ import asyncio
 import os
 from telegram_sender import send_to_telegram
 from youtube_downloader import download_video, download_playlist
+from face_blur import blur_faces_in_video
 from detach import detach_audio
 from audio_split import split
 from spleeter import separate_vocals_with_spleeter
@@ -17,7 +18,8 @@ def start(url,is_playlist = True, output_path='videos',is_send_to_telegram=False
         
     else:
         video_title, video_path = download_video(url, output_path)
-        handle(video_title,video_path,is_send_to_telegram)
+        blurred_video_path = blur_faces_in_video(video_path, video_path.replace('.mp4', '_blurred.mp4'))
+        handle(video_title, blurred_video_path, is_send_to_telegram)
         
 
         
