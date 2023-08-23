@@ -3,7 +3,7 @@ import numpy as np
 
 def blur_faces_in_video(input_video_path, output_video_path):
     # Load the face detector
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    face_cascade = cv2.CascadeClassifier('path/to/new_model.xml')
 
     # Open the input video file
     input_video = cv2.VideoCapture(input_video_path)
