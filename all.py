@@ -1,6 +1,7 @@
 from pytube import YouTube
 from moviepy.editor import *
 import os
+from deepface import DeepFace
 
 def download_youtube_video(video_url, output_path):
     try:
@@ -31,6 +32,36 @@ def detach_audio(video_path, output_audio_path):
     # Close the video and audio clips
     video_clip.close()
     audio_clip.close()
+
+def blur_female_faces(video_path):
+    # Load the video clip
+    video_clip = VideoFileClip(video_path)
+
+    # Initialize an empty list to store the processed frames
+    processed_frames = []
+
+    # Iterate over the frames of the video
+    for frame in video_clip.iter_frames():
+        # Use DeepFace to detect faces and their genders in the frame
+        results = DeepFace.analyze(frame, actions=['gender'])
+
+        # Iterate over the detected faces
+        for result in results:
+            # If the face is identified as female, blur it
+            if result['gender'] == 'Woman':
+                frame = blur_face(frame, result['region'])
+
+        # Add the processed frame to the list
+        processed_frames.append(frame)
+
+    # Combine the processed frames into a new video
+    new_video = concatenate_videoclips(processed_frames)
+
+    # Save the new video to a file and return its path
+    new_video_path = video_path.replace('.mp4', '_blurred.mp4')
+    new_video.write_videofile(new_video_path)
+
+    return new_video_path
 
 def get_last_file_in_dir(directory):
     # Get a list of all files in the directory
@@ -109,9 +140,10 @@ download_youtube_video('https://www.youtube.com/watch?v=WcKgqocYukI', dir)
 # Example usage:
 downloaded_file_name = get_last_file_in_dir(dir)
 downloaded_file_dir = dir+'\\'+downloaded_file_name
+blurred_video_path = blur_female_faces(downloaded_file_dir)
 detached_audio = 'output\\det.wav'
 print( downloaded_file_name)
-detach_audio(downloaded_file_dir, detached_audio)
+detach_audio(blurred_video_path, detached_audio)
 # Replace 'input_audio_file.mp3' with the path to your input audio file
 # Replace 'output_folder' with the desired output folder path
 separate_vocals_with_spleeter(detached_audio, 'output')
