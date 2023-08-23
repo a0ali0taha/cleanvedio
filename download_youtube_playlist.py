@@ -79,6 +79,11 @@ checkbox_telegram_var.set(True)
 checkbox_telegram = tk.Checkbutton(window, text="Send to Telegram", variable=checkbox_telegram_var)
 checkbox_telegram.pack(pady=5)
 
+checkbox_blur_var = BooleanVar()
+checkbox_blur_var.set(False)
+checkbox_blur = tk.Checkbutton(window, text="Blur Faces in Video", variable=checkbox_blur_var)
+checkbox_blur.pack(pady=5)
+
 btn_download = tk.Button(window, text="Download", command=download_button_clicked)
 btn_download.pack(pady=10)
 
