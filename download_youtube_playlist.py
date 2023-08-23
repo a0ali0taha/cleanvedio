@@ -1,3 +1,7 @@
+
+import cv2
+
+<<<< UPDATED
 import os
 import tkinter as tk
 from tkinter import messagebox, BooleanVar
