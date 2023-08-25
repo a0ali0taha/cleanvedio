@@ -1,6 +1,9 @@
+import cv2
+import numpy as np
 from pytube import YouTube
 from moviepy.editor import *
 import os
+from deepface import DeepFace
 
 def download_youtube_video(video_url, output_path):
     try:
@@ -31,6 +34,36 @@ def detach_audio(video_path, output_audio_path):
     # Close the video and audio clips
     video_clip.close()
     audio_clip.close()
+
+def blur_female_faces(video_path):
+    # Load the video clip
+    video_clip = VideoFileClip(video_path)
+
+    # Initialize an empty list to store the processed frames
+    processed_frames = []
+
+    # Iterate over the frames of the video
+    for frame in video_clip.iter_frames():
+        # Use DeepFace to detect faces and their genders in the frame
+        results = DeepFace.analyze(frame, actions=['gender'], enforce_detection=False)
+
+        # Iterate over the detected faces
+        for result in results:
+            # If the face is identified as female, blur it
+            if result['gender'] == 'Woman':
+                frame = blur_face(frame, result['region'])
+
+        # Add the processed frame to the list
+        processed_frames.append(frame)
+
+    # Combine the processed frames into a new video
+    new_video = concatenate_videoclips(processed_frames)
+
+    # Save the new video to a file and return its path
+    new_video_path = video_path.replace('.mp4', '_blurred.mp4')
+    new_video.write_videofile(new_video_path)
+
+    return new_video_path
 
 def get_last_file_in_dir(directory):
     # Get a list of all files in the directory
@@ -68,6 +101,25 @@ def separate_vocals_with_spleeter(input_audio_path, output_folder):
     except subprocess.CalledProcessError as e:
         print(f"Error while calling Spleeter: {e}")
 
+
+def blur_face(frame, region):
+    # Convert the frame to a format suitable for processing with cv2
+    frame = cv2.cvtColor(np.array(frame), cv2.COLOR_RGB2BGR)
+
+    # Extract the region from the frame
+    x, y, w, h = region
+    face = frame[y:y+h, x:x+w]
+
+    # Apply a blur effect to the face
+    blurred_face = cv2.GaussianBlur(face, (99, 99), 30)
+
+    # Replace the original face in the frame with the blurred face
+    frame[y:y+h, x:x+w] = blurred_face
+
+    # Convert the frame back to its original format
+    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+    return frame
 
 def attach_audio(video_path, audio_path, output_video_path):
     # Load the video clip
@@ -109,9 +161,10 @@ download_youtube_video('https://www.youtube.com/watch?v=WcKgqocYukI', dir)
 # Example usage:
 downloaded_file_name = get_last_file_in_dir(dir)
 downloaded_file_dir = dir+'\\'+downloaded_file_name
+blurred_video_path = blur_female_faces(downloaded_file_dir)
 detached_audio = 'output\\det.wav'
 print( downloaded_file_name)
-detach_audio(downloaded_file_dir, detached_audio)
+detach_audio(blurred_video_path, detached_audio)
 # Replace 'input_audio_file.mp3' with the path to your input audio file
 # Replace 'output_folder' with the desired output folder path
 separate_vocals_with_spleeter(detached_audio, 'output')
