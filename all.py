@@ -45,7 +45,7 @@ def blur_female_faces(video_path):
     # Iterate over the frames of the video
     for frame in video_clip.iter_frames():
         # Use DeepFace to detect faces and their genders in the frame
-        results = DeepFace.analyze(frame, actions=['gender'])
+        results = DeepFace.analyze(frame, actions=['gender'], enforce_detection=False)
 
         # Iterate over the detected faces
         for result in results:
