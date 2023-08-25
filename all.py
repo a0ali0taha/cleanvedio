@@ -1,3 +1,5 @@
+import cv2
+import numpy as np
 from pytube import YouTube
 from moviepy.editor import *
 import os
@@ -99,6 +101,25 @@ def separate_vocals_with_spleeter(input_audio_path, output_folder):
     except subprocess.CalledProcessError as e:
         print(f"Error while calling Spleeter: {e}")
 
+
+def blur_face(frame, region):
+    # Convert the frame to a format suitable for processing with cv2
+    frame = cv2.cvtColor(np.array(frame), cv2.COLOR_RGB2BGR)
+
+    # Extract the region from the frame
+    x, y, w, h = region
+    face = frame[y:y+h, x:x+w]
+
+    # Apply a blur effect to the face
+    blurred_face = cv2.GaussianBlur(face, (99, 99), 30)
+
+    # Replace the original face in the frame with the blurred face
+    frame[y:y+h, x:x+w] = blurred_face
+
+    # Convert the frame back to its original format
+    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+    return frame
 
 def attach_audio(video_path, audio_path, output_video_path):
     # Load the video clip
