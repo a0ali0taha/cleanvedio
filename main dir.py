@@ -18,5 +18,5 @@ def start_file(video_path,send_to_telegram):
     video= Video(processing_input_folder=processing_input_folder,input_video_path=video_path,send_to_telegram=send_to_telegram)
     handle(video)
 
-start_dir("C:\\Users\\User\\Downloads\\الأسد الملك",True)
-# start_file("F:\\Ahmed\\lab\\scripts\\NoMusic\\cleanvedio\\final\\قصص العجائب في القرآن  الحلقة 16  بلعام بن باعوراء - ج 1  Marvellous Stories from Quran.mp4",True)
+# start_dir("F:\\sobh",False)
+start_file("C:\\Users\\User\\Downloads\\فيلم البحث عن دوري.mp4",False)
