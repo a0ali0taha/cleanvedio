@@ -19,6 +19,8 @@ def get_last_file_in_dir(directory):
 def detach_audio(video):
     video_path=video.input_video_path
     output_audio_path= video.detached_mp3
+    if os.path.exists(output_audio_path):
+        return
     # Load the video clip
     video_clip = VideoFileClip(video_path)
 

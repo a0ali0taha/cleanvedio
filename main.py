@@ -7,9 +7,11 @@ from services.audio_split import split_video
 from services.spleeter import create_vocals
 from services.audio_merge import combine_audio_segments
 from services.attach import attach_audio
+from services.mylogger import logger
 from video import Video
 import threading
 from services.get_first_image import get_thumbnail
+# add logger to the code?
 def start(url,is_playlist = True, output_path='videos',is_send_to_telegram=False):
     i=1
     if is_playlist:
@@ -51,6 +53,7 @@ def handle(video):
     attach_audio(video)
     if video.send_to_telegram:
         get_thumbnail(video)
+        logger.info(f"start  sending to telegram: {video.caption}")
         threading.Thread(target=send_video_to_telegram_in_asyncio, args=([video])).start()
 
 

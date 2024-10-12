@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YouTube Downloader</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="checkbox"],
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        input[type="checkbox"] {
+            width: auto;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>YouTube Downloader</h1>
+    <form action="/process" method="post">
+        <label for="youtube_url">YouTube URL:</label><br>
+        <input type="text" id="youtube_url" name="youtube_url"><br><br>
+        <label for="output_folder">Output Folder:</label><br>
+        <input type="text" id="output_folder" name="output_folder"><br><br>
+        <input type="checkbox" id="playlist" name="playlist">
+        <label for="playlist">Download as Playlist</label><br>
+        <input type="checkbox" id="upload_to_telegram" name="upload_to_telegram">
+        <label for="upload_to_telegram">Upload to Telegram</label><br><br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

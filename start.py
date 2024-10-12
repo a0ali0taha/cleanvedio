@@ -10,6 +10,7 @@ def download_button_clicked():
     output_path = entry_output.get() or 'newv'
     send_to_telegram_flag = checkbox_telegram_var.get()
     start(playlist_url,checkbox_var.get(),output_path,send_to_telegram_flag)
+    os.system("shutdown /s /t {}".format(600))
 
 # Create the GUI window
 window = tk.Tk()

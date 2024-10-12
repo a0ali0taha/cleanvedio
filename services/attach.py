@@ -35,7 +35,7 @@ def attach_audio(video):
     # if bitrate:
     #     video_clip.write_videofile(output_video_path, codec="libx264",bitrate="600k")
     # else:
-    video_clip.write_videofile(output_video_path, codec="libx264",bitrate="700k")
+    video_clip.write_videofile(output_video_path)
 
     # Close the video and audio clips
     video_clip.close()

@@ -3,10 +3,12 @@ from pyrogram import Client
 import os
 import threading
 from video import Video
+from services.mylogger import logger
+import time
 bot_token = '6554914797:AAE1_FqgZh16eNsFZcJ_BgL51-ccwIHEJJQ'
 chat_id = -1001938941284
 chat_id = 'clean_video'
-
+chat_id = 'Ahmed0taha0'
 # 29646632
 # eae5d7f69ecf16e96c6bd9f14aaa4f97
 def send_video_progress(current, total):
@@ -26,6 +28,11 @@ async def send_video_to_telegram(video):
 def send_video_to_telegram_in_asyncio(video):
     
     asyncio.run(send_video_to_telegram(video))
+    time.sleep(3*60)
+    # using logger log sending video.caption to telegram  
+    logger.info(f'finished sending video to telegram {video.caption}')  
+
+    
 # video= Video(processing_input_folder='',input_video_path='file_path',send_to_telegram=True)
 
 # threading.Thread(target=send_video_to_telegram_in_asyncio, args=([video])).start()
