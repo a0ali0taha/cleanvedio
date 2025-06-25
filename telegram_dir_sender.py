@@ -75,7 +75,7 @@ def start_dir(dir):
             i=i+1
 
 
-start_dir("F:\\Ahmed\\lab\\scripts\\NoMusic\\download from yt\\final\\nemo" )
+start_dir("F:\\Ahmed\\lab\\scripts\\NoMusic\\cleanvedio\\final\\rob" )
 
 os.system("shutdown /s /t {}".format(600))
 

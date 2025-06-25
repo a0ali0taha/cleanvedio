@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Final Videos</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        
+        .video-list {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .video-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .video-item:last-child {
+            border-bottom: none;
+        }
+        
+        .video-name {
+            font-weight: bold;
+            color: #007bff;
+            text-decoration: none;
+        }
+        
+        .video-name:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Processed Videos</h1>
+    <div class="video-list">
+        {% if videos %}
+            {% for video in videos %}
+                <div class="video-item">
+                    <video width="100%" controls>
+                        <source src="{{ url_for('static', filename='/' + video.name) }}" type="video/mp4">
+                        
+                        Your browser does not support the video player.
+                    </video>
+                    <p class="video-name">{{ video.name }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No videos available.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

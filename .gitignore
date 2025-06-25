@@ -2,3 +2,8 @@
 __pycache__/
 pretrained_models/
 final/
+input/
+*.mp4
+*.mp4.part
+*.m4a
+*.mp3

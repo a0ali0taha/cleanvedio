@@ -55,17 +55,53 @@
     </style>
 </head>
 <body>
-    <h1>YouTube Downloader</h1>
-    <form action="/process" method="post">
-        <label for="youtube_url">YouTube URL:</label><br>
-        <input type="text" id="youtube_url" name="youtube_url"><br><br>
+    <h1>Video Processor</h1>
+    <form action="/process" method="post" enctype="multipart/form-data">
+        <div id="source-selection">
+            <input type="radio" id="youtube" name="source" value="youtube" checked>
+            <label for="youtube">YouTube URL</label>
+            <input type="radio" id="local" name="source" value="local">
+            <label for="local">Local Video</label><br><br>
+        </div>
+
+        <div id="youtube-input">
+            <label for="youtube_url">YouTube URL:</label><br>
+            <input type="text" id="youtube_url" name="youtube_url"><br><br>
+        </div>
+
+        <div id="file-input" style="display:none;">
+            <label for="video_file">Video File:</label><br>
+            <input type="file" id="video_file" name="video_file" accept="video/*"><br><br>
+        </div>
+
         <label for="output_folder">Output Folder:</label><br>
         <input type="text" id="output_folder" name="output_folder"><br><br>
-        <input type="checkbox" id="playlist" name="playlist">
-        <label for="playlist">Download as Playlist</label><br>
+        
+        <div id="playlist-option">
+            <input type="checkbox" id="playlist" name="playlist">
+            <label for="playlist">Download as Playlist</label><br>
+        </div>
+        
         <input type="checkbox" id="upload_to_telegram" name="upload_to_telegram">
         <label for="upload_to_telegram">Upload to Telegram</label><br><br>
+        
         <input type="submit" value="Submit">
     </form>
+
+
+
+    <script>
+        document.querySelectorAll('input[name="source"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.getElementById('youtube-input').style.display = 
+                    this.value === 'youtube' ? 'block' : 'none';
+                document.getElementById('file-input').style.display = 
+                    this.value === 'local' ? 'block' : 'none';
+                document.getElementById('playlist-option').style.display = 
+                    this.value === 'youtube' ? 'block' : 'none';
+            });
+        });
+    </script>
+    
 </body>
 </html>

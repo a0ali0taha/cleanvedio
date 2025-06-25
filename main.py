@@ -33,7 +33,8 @@ def start(url,is_playlist = True, output_path='videos',is_send_to_telegram=False
         
 
 def iniat_dirs(video):
-    os.makedirs(video.processing_input_folder)
+    if not os.path.exists(video.processing_input_folder):
+        os.makedirs(video.processing_input_folder)
     
     detached_audio_path= f'{video.processing_input_folder}\\det.mp3'#newv\1\vtitle.mp3
     video.detached_mp3= detached_audio_path
@@ -46,13 +47,18 @@ def handle(video):
     #video_name=vtitile,   output_path=newv\1,    video_path=newv\vtitle.mp4,'F:\\Ahmed\\lab\\scripts\\NoMusic\\cleanvedio\\newv\\Watch The Secret Life Of Pets For English Learners 1.mp4'
 
     iniat_dirs(video)
-    detach_audio(video)
+
+    if not os.path.exists(video.detached_mp3):
+        detach_audio(video)
+
     split_video(video)#newv\1\seg_1.mp3
+
     create_vocals(video)
     combine_audio_segments(video)
     attach_audio(video)
     if video.send_to_telegram:
-        get_thumbnail(video)
+        if not os.path.exists(video.thumbnail_path):
+            get_thumbnail(video)
         logger.info(f"start  sending to telegram: {video.caption}")
         threading.Thread(target=send_video_to_telegram_in_asyncio, args=([video])).start()
 

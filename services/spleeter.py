@@ -25,8 +25,11 @@ def create_vocals(video):
     vocal_files = []
     for i,mp3_file in enumerate(video.audio_segments_paths): 
         vocal_folder_seg=f'{vocals_folder}'#newv\1\vocals
-        separate_vocals_with_spleeter(mp3_file,vocal_folder_seg)
-        vocal_files.append(f'{vocal_folder_seg}\\seg_{i+1}\\vocals.mp3')#newv\1\vocals\seg_1\vocals.mp3, newv\1\vocals\seg_1\vocals.mp3
+        output_file=f'{vocal_folder_seg}\\{os.path.basename(mp3_file).replace(".mp3", "")}\\vocals.mp3'
+        if not os.path.exists(output_file):
+            separate_vocals_with_spleeter(mp3_file,vocal_folder_seg)
+        vocal_files.append(output_file)#newv\1\vocals\seg_1\vocals.mp3, newv\1\vocals\seg_1\vocals.mp3
+        print(output_file)
     video.vocals_paths=vocal_files
 
 # Replace 'path_to_directory' with the actual path to the directory you want to explore
