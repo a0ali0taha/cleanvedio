@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CleanVedio - Remove Background Music</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: radial-gradient(circle at top, #111f3e 0%, #0b1220 60%, #060a13 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+        .container { max-width: 760px; margin: 0 auto; }
+        .hero {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.35rem;
+            color: #f8fafc;
+            letter-spacing: 0.2px;
+        }
+        .subtitle {
+            color: #9fb2d2;
+            margin-bottom: 0.7rem;
+            font-size: 0.95rem;
+        }
+        .microcopy {
+            color: #7f93b7;
+            font-size: 0.82rem;
+        }
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 1.4rem;
+            flex-wrap: wrap;
+        }
+        .lang-btn {
+            color: #bfdbfe;
+            font-size: 0.87rem;
+            background: rgba(37, 99, 235, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.35);
+            border-radius: 999px;
+            padding: 0.4rem 0.85rem;
+            cursor: pointer;
+        }
+        .lang-btn:hover { background: rgba(37, 99, 235, 0.28); }
+        .nav a {
+            color: #bfdbfe;
+            text-decoration: none;
+            font-size: 0.87rem;
+            background: rgba(37, 99, 235, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.35);
+            border-radius: 999px;
+            padding: 0.4rem 0.85rem;
+        }
+        .nav a:hover { background: rgba(37, 99, 235, 0.28); }
+        .card {
+            background: rgba(15, 23, 42, 0.85);
+            border-radius: 14px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            border: 1px solid #2b3a55;
+            backdrop-filter: blur(4px);
+        }
+        .card-title {
+            font-weight: 650;
+            color: #f8fafc;
+            margin-bottom: 0.3rem;
+            font-size: 0.95rem;
+        }
+        .card-hint {
+            color: #8ca2c8;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            font-weight: 540;
+            margin-bottom: 0.4rem;
+            color: #cbd5e1;
+            font-size: 0.86rem;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 0.66rem 0.78rem;
+            border-radius: 10px;
+            border: 1px solid #3d4d6c;
+            background: #0c162b;
+            color: #f1f5f9;
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        textarea {
+            min-height: 56px;
+            resize: vertical;
+            margin-bottom: 0.3rem;
+        }
+        input[type="text"] { margin-bottom: 0.95rem; }
+        input[type="text"]:focus, textarea:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+        .textarea-hint, .field-hint {
+            font-size: 0.75rem;
+            color: #7890b8;
+            margin-bottom: 0.9rem;
+        }
+        .radio-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .radio-group label {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            padding: 0.7rem;
+            border-radius: 10px;
+            border: 1px solid #3d4d6c;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+            margin: 0;
+        }
+        .radio-group input[type="radio"] { display: none; }
+        .radio-group input[type="radio"]:checked + label {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            border-color: #60a5fa;
+            color: #fff;
+        }
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .checkbox-row input[type="checkbox"] {
+            width: 1rem;
+            height: 1rem;
+            accent-color: #3b82f6;
+        }
+        .checkbox-row label {
+            margin-bottom: 0;
+            font-size: 0.83rem;
+            color: #c6d4ed;
+        }
+        .drop-zone {
+            border: 2px dashed #3d4d6c;
+            border-radius: 10px;
+            padding: 1.6rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 0.9rem;
+            position: relative;
+            background: rgba(17, 27, 45, 0.65);
+        }
+        .drop-zone:hover, .drop-zone.dragover {
+            border-color: #60a5fa;
+            background: rgba(37, 99, 235, 0.08);
+        }
+        .drop-zone input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .drop-zone-text {
+            color: #a5b7d7;
+            font-size: 0.9rem;
+        }
+        .drop-zone-text strong { color: #93c5fd; }
+        .drop-zone-file {
+            display: none;
+            color: #4ade80;
+            font-size: 0.82rem;
+            margin-top: 0.5rem;
+        }
+        .validation-error {
+            color: #fca5a5;
+            font-size: 0.79rem;
+            margin-top: -0.2rem;
+            margin-bottom: 0.8rem;
+            display: none;
+        }
+        .btn-primary, .btn-secondary {
+            border-radius: 10px;
+            border: none;
+            padding: 0.72rem 1rem;
+            font-size: 0.95rem;
+            font-weight: 620;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            width: 100%;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #fff;
+            margin-top: 0.35rem;
+        }
+        .btn-primary:hover { filter: brightness(1.06); }
+        .btn-primary:disabled {
+            background: #41516f;
+            color: #a9b7cd;
+            cursor: not-allowed;
+        }
+        .btn-secondary {
+            background: #1f2e49;
+            color: #d8e4f8;
+            border: 1px solid #39507a;
+        }
+        .btn-secondary:hover { background: #26395a; }
+        .cta-row {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.95rem;
+        }
+        #job-panel { display: none; }
+        .status-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.8rem;
+        }
+        .spinner {
+            width: 1.2rem;
+            height: 1.2rem;
+            border: 3px solid #41516f;
+            border-top-color: #60a5fa;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .status-label {
+            font-weight: 650;
+            font-size: 1.06rem;
+        }
+        .progress-bar-track {
+            width: 100%;
+            height: 8px;
+            background: #23314d;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 0.65rem;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            border-radius: 8px;
+            transition: width 0.45s ease;
+            width: 0%;
+        }
+        .status-detail {
+            color: #a6b6d2;
+            font-size: 0.84rem;
+            margin-bottom: 0.38rem;
+        }
+        .status-success { color: #4ade80; }
+        .status-error { color: #fca5a5; }
+        .advanced-toggle {
+            cursor: pointer;
+            color: #a9bfdf;
+            font-size: 0.84rem;
+            user-select: none;
+            margin-bottom: 0.5rem;
+        }
+        .jobs-panel {
+            display: none;
+        }
+        .jobs-panel.show {
+            display: block;
+        }
+        .job-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.54rem 0;
+            border-bottom: 1px solid #273754;
+            font-size: 0.82rem;
+            cursor: pointer;
+        }
+        .job-item:last-child { border-bottom: none; }
+        .job-item:hover { color: #dbe8ff; }
+        .badge {
+            padding: 0.2rem 0.45rem;
+            border-radius: 4px;
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+        .badge-completed { background: #14532d; color: #86efac; }
+        .badge-failed { background: #7f1d1d; color: #fca5a5; }
+        .badge-running { background: #1e3a8a; color: #93c5fd; }
+        .badge-queued { background: #374151; color: #cbd5e1; }
+        .badge-retry {
+            background: #164e63;
+            color: #67e8f9;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+            margin-right: 0.3rem;
+        }
+        .badge-retry:hover { background: #0e7490; }
+        .toast-wrap {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 999;
+        }
+        .toast {
+            min-width: 220px;
+            max-width: 340px;
+            padding: 0.7rem 0.8rem;
+            border-radius: 9px;
+            border: 1px solid #35507f;
+            background: #0c1f40;
+            color: #dbeafe;
+            font-size: 0.82rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        }
+        .toast.error {
+            border-color: #7f1d1d;
+            background: #3f1111;
+            color: #fecaca;
+        }
+        .toast.success {
+            border-color: #14532d;
+            background: #0f2c1a;
+            color: #bbf7d0;
+        }
+        body[dir="rtl"] .container {
+            direction: rtl;
+        }
+        body[dir="rtl"] .toast-wrap {
+            right: auto;
+            left: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>CleanVedio</h1>
+            <p class="subtitle" id="subtitle-text">Remove background music and keep voices clear.</p>
+            <p class="microcopy" id="microcopy-text">Paste a YouTube link or upload a local video. We process it and place the result in your processed videos page.</p>
+        </div>
+
+        <div class="nav">
+            <a href="/" id="nav-new-process">New Process</a>
+            <a href="/final" id="nav-processed-videos">Processed Videos</a>
+            <button type="button" class="lang-btn" id="lang-toggle">العربية</button>
+        </div>
+
+        <form id="process-form" class="card">
+            <div class="card-title" id="start-title">Start a new clean audio job</div>
+            <div class="card-hint" id="start-hint">Choose your input source and press Start Processing.</div>
+
+            <div class="radio-group">
+                <input type="radio" id="youtube" name="source" value="youtube" checked>
+                <label for="youtube" id="source-youtube">YouTube Links</label>
+                <input type="radio" id="local" name="source" value="local">
+                <label for="local" id="source-local">Local File</label>
+            </div>
+
+            <div id="youtube-input">
+                <label for="youtube_url" id="youtube-url-label">YouTube URL</label>
+                <textarea id="youtube_url" name="youtube_url" rows="2" placeholder="https://www.youtube.com/watch?v=..."></textarea>
+                <p class="textarea-hint" id="youtube-url-hint">Tip: put one URL per line if you want multiple jobs.</p>
+                <div class="validation-error" id="url-error"></div>
+            </div>
+
+            <div id="file-input" style="display:none;">
+                <label id="video-file-label">Video File</label>
+                <div class="drop-zone" id="drop-zone">
+                    <input type="file" id="video_file" name="video_file" accept="video/*">
+                    <p class="drop-zone-text"><strong id="drop-strong">Click to choose</strong> <span id="drop-rest">or drag and drop a video file</span></p>
+                    <p class="drop-zone-file" id="drop-zone-file"></p>
+                </div>
+                <p class="field-hint" id="supported-types">Supported: MP4, MOV, AVI, MKV, WEBM</p>
+                <div class="validation-error" id="file-error"></div>
+            </div>
+
+            <label for="output_folder" id="download-folder-label">Download Folder (optional)</label>
+            <input type="text" id="output_folder" name="output_folder" placeholder="Leave empty to use the app default">
+
+            <div class="checkbox-row">
+                <input type="checkbox" id="playlist" name="playlist">
+                <label for="playlist" id="playlist-label">Treat as playlist when link points to a playlist</label>
+            </div>
+
+            <button type="submit" id="submit-btn" class="btn-primary">Start Processing</button>
+        </form>
+
+        <div id="job-panel" class="card">
+            <div class="status-header">
+                <div class="spinner" id="job-spinner"></div>
+                <span class="status-label" id="job-status-label">Queued</span>
+            </div>
+            <div class="progress-bar-track">
+                <div class="progress-bar-fill" id="job-progress-bar"></div>
+            </div>
+            <div class="status-detail" id="job-progress-text"></div>
+            <div class="status-detail" id="job-elapsed"></div>
+            <div class="status-detail" id="job-eta"></div>
+            <div id="job-result"></div>
+        </div>
+
+        <div class="card">
+            <div class="advanced-toggle" id="advanced-toggle">Show advanced job history</div>
+            <div id="jobs-list" class="jobs-panel">
+                <div class="card-title" id="recent-jobs-title">Recent Jobs</div>
+                <div class="card-hint" id="recent-jobs-hint">Use this only if you want to inspect or retry past jobs.</div>
+                <div id="jobs-container"><p style="color: #7f93b7; font-size: 0.82rem;">No jobs yet</p></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-wrap" id="toast-wrap"></div>
+
+    <script>
+        const I18N = {
+            en: {
+                subtitle: "Remove background music and keep voices clear.",
+                microcopy: "Paste a YouTube link or upload a local video. We process it and place the result in your processed videos page.",
+                navNew: "New Process",
+                navFinal: "Processed Videos",
+                langButton: "العربية",
+                startTitle: "Start a new clean audio job",
+                startHint: "Choose your input source and press Start Processing.",
+                sourceYoutube: "YouTube Links",
+                sourceLocal: "Local File",
+                youtubeUrlLabel: "YouTube URL",
+                youtubeUrlHint: "Tip: put one URL per line if you want multiple jobs.",
+                videoFileLabel: "Video File",
+                dropStrong: "Click to choose",
+                dropRest: "or drag and drop a video file",
+                supportedTypes: "Supported: MP4, MOV, AVI, MKV, WEBM",
+                downloadFolderLabel: "Download Folder (optional)",
+                outputPlaceholder: "Leave empty to use the app default",
+                playlistLabel: "Treat as playlist when link points to a playlist",
+                submitIdle: "Start Processing",
+                submitBusy: "Submitting...",
+                showAdvanced: "Show advanced job history",
+                hideAdvanced: "Hide advanced job history",
+                recentJobs: "Recent Jobs",
+                recentJobsHint: "Use this only if you want to inspect or retry past jobs.",
+                noJobs: "No jobs yet",
+                noStatus: "Could not read job status.",
+                noRefresh: "Could not refresh job history.",
+                queuedJobs: (n) => `Queued ${n} job(s).`,
+                queuedVideo: "Video queued successfully.",
+                requestFailed: (e) => `Request failed: ${e}`,
+                queueFailed: (url) => `Failed to queue: ${url}`,
+                retryFailed: "Retry failed.",
+                retryStarted: "Retry started.",
+                openOutputFailed: "Could not open output folder.",
+                openOutputOk: "Output folder opened.",
+                elapsed: (s) => `Elapsed: ${s}s`,
+                eta: (s) => `Estimated remaining: ~${s}s`,
+                doneTitle: "Done - CleanVedio",
+                processingTitle: "Processing - CleanVedio",
+                failedTitle: "Failed - CleanVedio",
+                completeMsg: (s) => `Your video is ready in ${s}s.`,
+                openProcessed: "Open Processed Videos",
+                openOutput: "Open Output Folder",
+                processAnother: "Process Another",
+                startNew: "Start New Job",
+                processingFailed: "Processing failed. Please retry.",
+                retry: "Retry",
+                errorNoUrl: "Please enter at least one YouTube URL.",
+                errorInvalidUrl: (u) => `Invalid YouTube URL: ${u}`,
+                errorNoFile: "Please select a video file.",
+                errorFileType: (t) => `Unsupported file type: ${t}`,
+                stage: {
+                    queued: "Queued",
+                    downloading: "Downloading Video",
+                    extracting_audio: "Extracting Audio",
+                    splitting: "Preparing Segments",
+                    separating_vocals: "Removing Background Music",
+                    merging: "Merging Audio",
+                    attaching: "Building Final Video",
+                    completed: "Completed",
+                    failed: "Failed",
+                },
+            },
+            ar: {
+                subtitle: "إزالة الموسيقى الخلفية مع الحفاظ على وضوح الصوت.",
+                microcopy: "ألصق رابط يوتيوب أو ارفع فيديو من جهازك. سنعالج الفيديو ونضع النتيجة في صفحة الفيديوهات المعالجة.",
+                navNew: "معالجة جديدة",
+                navFinal: "الفيديوهات المعالجة",
+                langButton: "English",
+                startTitle: "ابدأ مهمة تنظيف صوت جديدة",
+                startHint: "اختر مصدر الفيديو ثم اضغط ابدأ المعالجة.",
+                sourceYoutube: "روابط يوتيوب",
+                sourceLocal: "ملف محلي",
+                youtubeUrlLabel: "رابط يوتيوب",
+                youtubeUrlHint: "نصيحة: ضع رابطاً في كل سطر إذا أردت معالجة عدة روابط.",
+                videoFileLabel: "ملف الفيديو",
+                dropStrong: "اضغط للاختيار",
+                dropRest: "أو اسحب ملف فيديو وأفلته هنا",
+                supportedTypes: "الأنواع المدعومة: MP4, MOV, AVI, MKV, WEBM",
+                downloadFolderLabel: "مجلد التحميل (اختياري)",
+                outputPlaceholder: "اتركه فارغاً لاستخدام المجلد الافتراضي",
+                playlistLabel: "اعتبره قائمة تشغيل إذا كان الرابط لقائمة",
+                submitIdle: "ابدأ المعالجة",
+                submitBusy: "جارٍ الإرسال...",
+                showAdvanced: "إظهار سجل المهام المتقدم",
+                hideAdvanced: "إخفاء سجل المهام المتقدم",
+                recentJobs: "المهام الأخيرة",
+                recentJobsHint: "استخدم هذا القسم إذا أردت الفحص أو إعادة المحاولة للمهام السابقة.",
+                noJobs: "لا توجد مهام بعد",
+                noStatus: "تعذر قراءة حالة المهمة.",
+                noRefresh: "تعذر تحديث سجل المهام.",
+                queuedJobs: (n) => `تمت إضافة ${n} مهمة.`,
+                queuedVideo: "تمت إضافة الفيديو للطابور بنجاح.",
+                requestFailed: (e) => `فشل الطلب: ${e}`,
+                queueFailed: (url) => `تعذر إضافة الرابط: ${url}`,
+                retryFailed: "فشلت إعادة المحاولة.",
+                retryStarted: "بدأت إعادة المحاولة.",
+                openOutputFailed: "تعذر فتح مجلد الإخراج.",
+                openOutputOk: "تم فتح مجلد الإخراج.",
+                elapsed: (s) => `الوقت المنقضي: ${s}ث`,
+                eta: (s) => `الوقت المتبقي التقديري: ${s}ث`,
+                doneTitle: "اكتمل - CleanVedio",
+                processingTitle: "جارٍ المعالجة - CleanVedio",
+                failedTitle: "فشل - CleanVedio",
+                completeMsg: (s) => `الفيديو جاهز خلال ${s} ثانية.`,
+                openProcessed: "فتح الفيديوهات المعالجة",
+                openOutput: "فتح مجلد الإخراج",
+                processAnother: "معالجة فيديو آخر",
+                startNew: "بدء مهمة جديدة",
+                processingFailed: "فشلت المعالجة. حاول مرة أخرى.",
+                retry: "إعادة المحاولة",
+                errorNoUrl: "أدخل رابط يوتيوب واحداً على الأقل.",
+                errorInvalidUrl: (u) => `رابط يوتيوب غير صحيح: ${u}`,
+                errorNoFile: "الرجاء اختيار ملف فيديو.",
+                errorFileType: (t) => `نوع ملف غير مدعوم: ${t}`,
+                stage: {
+                    queued: "في الانتظار",
+                    downloading: "تنزيل الفيديو",
+                    extracting_audio: "استخراج الصوت",
+                    splitting: "تجهيز المقاطع",
+                    separating_vocals: "إزالة الموسيقى الخلفية",
+                    merging: "دمج الصوت",
+                    attaching: "إنشاء الفيديو النهائي",
+                    completed: "اكتمل",
+                    failed: "فشل",
+                },
+            },
+        };
+
+        let currentLang = localStorage.getItem("cleanvedio_lang") || "en";
+
+        function t(key, arg) {
+            const lang = I18N[currentLang] || I18N.en;
+            const value = key.split(".").reduce((obj, part) => (obj ? obj[part] : undefined), lang);
+            if (typeof value === "function") return value(arg);
+            return value || key;
+        }
+
+        function applyLanguage() {
+            document.documentElement.lang = currentLang === "ar" ? "ar" : "en";
+            document.body.dir = currentLang === "ar" ? "rtl" : "ltr";
+            document.getElementById("subtitle-text").textContent = t("subtitle");
+            document.getElementById("microcopy-text").textContent = t("microcopy");
+            document.getElementById("nav-new-process").textContent = t("navNew");
+            document.getElementById("nav-processed-videos").textContent = t("navFinal");
+            document.getElementById("lang-toggle").textContent = t("langButton");
+            document.getElementById("start-title").textContent = t("startTitle");
+            document.getElementById("start-hint").textContent = t("startHint");
+            document.getElementById("source-youtube").textContent = t("sourceYoutube");
+            document.getElementById("source-local").textContent = t("sourceLocal");
+            document.getElementById("youtube-url-label").textContent = t("youtubeUrlLabel");
+            document.getElementById("youtube-url-hint").textContent = t("youtubeUrlHint");
+            document.getElementById("video-file-label").textContent = t("videoFileLabel");
+            document.getElementById("drop-strong").textContent = t("dropStrong");
+            document.getElementById("drop-rest").textContent = t("dropRest");
+            document.getElementById("supported-types").textContent = t("supportedTypes");
+            document.getElementById("download-folder-label").textContent = t("downloadFolderLabel");
+            document.getElementById("output_folder").placeholder = t("outputPlaceholder");
+            document.getElementById("playlist-label").textContent = t("playlistLabel");
+            document.getElementById("submit-btn").textContent = t("submitIdle");
+            document.getElementById("advanced-toggle").textContent = historyVisible ? t("hideAdvanced") : t("showAdvanced");
+            document.getElementById("recent-jobs-title").textContent = t("recentJobs");
+            document.getElementById("recent-jobs-hint").textContent = t("recentJobsHint");
+            document.title = currentLang === "ar" ? "CleanVedio - إزالة الموسيقى الخلفية" : "CleanVedio - Remove Background Music";
+        }
+
+        const ORIGINAL_TITLE = document.title;
+        const STAGES = [
+            "queued", "downloading", "extracting_audio", "splitting",
+            "separating_vocals", "merging", "attaching", "completed"
+        ];
+        const STAGE_LABELS = {
+            queued: "Queued",
+            downloading: "Downloading Video",
+            extracting_audio: "Extracting Audio",
+            splitting: "Preparing Segments",
+            separating_vocals: "Removing Background Music",
+            merging: "Merging Audio",
+            attaching: "Building Final Video",
+            completed: "Completed",
+            failed: "Failed"
+        };
+
+        const YT_PATTERN = /(?:youtube\.com\/(?:watch|shorts|playlist)|youtu\.be\/)/i;
+        const VIDEO_TYPES = ["video/mp4", "video/avi", "video/mov", "video/mkv",
+            "video/x-matroska", "video/quicktime", "video/webm", "video/x-msvideo"];
+
+        const dropZone = document.getElementById("drop-zone");
+        const fileInput = document.getElementById("video_file");
+        const dropFile = document.getElementById("drop-zone-file");
+        const advancedToggle = document.getElementById("advanced-toggle");
+        const jobsPanel = document.getElementById("jobs-list");
+        const langToggle = document.getElementById("lang-toggle");
+        let historyVisible = false;
+
+        function showToast(message, type = "info") {
+            const wrap = document.getElementById("toast-wrap");
+            const toast = document.createElement("div");
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            wrap.appendChild(toast);
+            setTimeout(() => toast.remove(), 4200);
+        }
+
+        advancedToggle.addEventListener("click", () => {
+            historyVisible = !historyVisible;
+            jobsPanel.classList.toggle("show", historyVisible);
+            advancedToggle.textContent = historyVisible
+                ? t("hideAdvanced")
+                : t("showAdvanced");
+        });
+
+        langToggle.addEventListener("click", () => {
+            currentLang = currentLang === "en" ? "ar" : "en";
+            localStorage.setItem("cleanvedio_lang", currentLang);
+            applyLanguage();
+            refreshJobsList();
+        });
+
+        function stagePercent(status) {
+            const idx = STAGES.indexOf(status);
+            if (idx < 0) return 0;
+            return Math.round((idx / (STAGES.length - 1)) * 100);
+        }
+
+        function getStageDurations() {
+            try { return JSON.parse(localStorage.getItem("stage_durations") || "{}"); }
+            catch { return {}; }
+        }
+
+        function recordStageDuration(stage, seconds) {
+            const durations = getStageDurations();
+            if (!durations[stage]) durations[stage] = [];
+            durations[stage].push(seconds);
+            if (durations[stage].length > 20) durations[stage].shift();
+            localStorage.setItem("stage_durations", JSON.stringify(durations));
+        }
+
+        function estimateRemaining(currentStage) {
+            const durations = getStageDurations();
+            const idx = STAGES.indexOf(currentStage);
+            if (idx < 0) return null;
+            let total = 0;
+            let count = 0;
+            for (let i = idx; i < STAGES.length - 1; i++) {
+                const key = STAGES[i];
+                if (durations[key] && durations[key].length) {
+                    const avg = durations[key].reduce((a, b) => a + b, 0) / durations[key].length;
+                    total += avg;
+                    count++;
+                }
+            }
+            return count ? Math.max(0, Math.round(total)) : null;
+        }
+
+        document.querySelectorAll('input[name="source"]').forEach((radio) => {
+            radio.addEventListener("change", function() {
+                document.getElementById("youtube-input").style.display = this.value === "youtube" ? "block" : "none";
+                document.getElementById("file-input").style.display = this.value === "local" ? "block" : "none";
+                document.getElementById("playlist").closest(".checkbox-row").style.display = this.value === "youtube" ? "flex" : "none";
+                clearErrors();
+            });
+        });
+
+        ["dragenter", "dragover"].forEach((evt) => {
+            dropZone.addEventListener(evt, (e) => {
+                e.preventDefault();
+                dropZone.classList.add("dragover");
+            });
+        });
+        ["dragleave", "drop"].forEach((evt) => {
+            dropZone.addEventListener(evt, (e) => {
+                e.preventDefault();
+                dropZone.classList.remove("dragover");
+            });
+        });
+        dropZone.addEventListener("drop", (e) => {
+            const files = e.dataTransfer.files;
+            if (files.length) {
+                fileInput.files = files;
+                showSelectedFile(files[0]);
+            }
+        });
+        fileInput.addEventListener("change", () => {
+            if (fileInput.files.length) showSelectedFile(fileInput.files[0]);
+        });
+
+        function showSelectedFile(file) {
+            dropFile.textContent = `${file.name} (${humanSize(file.size)})`;
+            dropFile.style.display = "block";
+        }
+
+        function humanSize(bytes) {
+            for (const unit of ["B", "KB", "MB", "GB"]) {
+                if (bytes < 1024) return `${bytes.toFixed(1)} ${unit}`;
+                bytes /= 1024;
+            }
+            return `${bytes.toFixed(1)} TB`;
+        }
+
+        function clearErrors() {
+            document.getElementById("url-error").style.display = "none";
+            document.getElementById("file-error").style.display = "none";
+        }
+
+        function showError(id, msg) {
+            const el = document.getElementById(id);
+            el.textContent = msg;
+            el.style.display = "block";
+        }
+
+        function validateForm() {
+            clearErrors();
+            const source = document.querySelector('input[name="source"]:checked').value;
+            if (source === "youtube") {
+                const raw = document.getElementById("youtube_url").value.trim();
+                if (!raw) {
+                    showError("url-error", t("errorNoUrl"));
+                    return false;
+                }
+                const urls = raw.split("\n").map((u) => u.trim()).filter(Boolean);
+                for (const url of urls) {
+                    if (!YT_PATTERN.test(url)) {
+                        showError("url-error", t("errorInvalidUrl", url));
+                        return false;
+                    }
+                }
+                return true;
+            }
+            const file = fileInput.files[0];
+            if (!file) {
+                showError("file-error", t("errorNoFile"));
+                return false;
+            }
+            if (file.type && !VIDEO_TYPES.includes(file.type)) {
+                showError("file-error", t("errorFileType", file.type));
+                return false;
+            }
+            return true;
+        }
+
+        function setProcessingState() {
+            document.getElementById("process-form").style.display = "none";
+            document.getElementById("job-panel").style.display = "block";
+            document.getElementById("job-spinner").style.display = "block";
+            document.getElementById("job-progress-bar").style.width = "0%";
+            document.getElementById("job-progress-bar").style.background = "linear-gradient(90deg, #3b82f6, #60a5fa)";
+            document.getElementById("job-result").innerHTML = "";
+            document.getElementById("job-eta").textContent = "";
+            document.title = t("processingTitle");
+        }
+
+        document.getElementById("process-form").addEventListener("submit", async function(e) {
+            e.preventDefault();
+            if (!validateForm()) return;
+
+            const btn = document.getElementById("submit-btn");
+            btn.disabled = true;
+            btn.textContent = t("submitBusy");
+
+            const source = document.querySelector('input[name="source"]:checked').value;
+            if (source === "youtube") {
+                const urls = document.getElementById("youtube_url").value.trim().split("\n").map((u) => u.trim()).filter(Boolean);
+                const jobIds = [];
+                for (const url of urls) {
+                    const formData = new FormData(this);
+                    formData.set("youtube_url", url);
+                    try {
+                        const resp = await fetch("/process", { method: "POST", body: formData });
+                        const data = await resp.json();
+                        if (!resp.ok || data.error) {
+                            showToast(data.error || t("queueFailed", url), "error");
+                            continue;
+                        }
+                        jobIds.push(data.job_id);
+                    } catch (err) {
+                        showToast(t("queueFailed", url) + `: ${err.message}`, "error");
+                    }
+                }
+                if (!jobIds.length) {
+                    btn.disabled = false;
+                    btn.textContent = t("submitIdle");
+                    return;
+                }
+                setProcessingState();
+                pollJob(jobIds[0]);
+                refreshJobsList();
+                showToast(t("queuedJobs", jobIds.length), "success");
+                return;
+            }
+
+            const formData = new FormData(this);
+            try {
+                const resp = await fetch("/process", { method: "POST", body: formData });
+                const data = await resp.json();
+                if (!resp.ok || data.error) {
+                    showToast(data.error || "Could not start processing.", "error");
+                    btn.disabled = false;
+                    btn.textContent = t("submitIdle");
+                    return;
+                }
+                setProcessingState();
+                pollJob(data.job_id);
+                showToast(t("queuedVideo"), "success");
+            } catch (err) {
+                showToast(t("requestFailed", err.message), "error");
+                btn.disabled = false;
+                btn.textContent = t("submitIdle");
+            }
+        });
+
+        let lastStage = null;
+        let stageStartTime = null;
+
+        async function pollJob(jobId) {
+            try {
+                const resp = await fetch(`/jobs/${jobId}`);
+                const job = await resp.json();
+                if (!resp.ok || job.error && job.status === undefined) {
+                    showToast(job.error || t("noStatus"), "error");
+                    setTimeout(() => pollJob(jobId), 5000);
+                    return;
+                }
+
+                if (lastStage && lastStage !== job.status && stageStartTime) {
+                    recordStageDuration(lastStage, (Date.now() - stageStartTime) / 1000);
+                }
+                if (job.status !== lastStage) {
+                    lastStage = job.status;
+                    stageStartTime = Date.now();
+                }
+
+                const pct = stagePercent(job.status);
+                document.getElementById("job-progress-bar").style.width = `${pct}%`;
+                document.getElementById("job-status-label").textContent = t(`stage.${job.status}`) || STAGE_LABELS[job.status] || job.status;
+                document.getElementById("job-progress-text").textContent = job.progress || "";
+                document.getElementById("job-elapsed").textContent = t("elapsed", job.elapsed);
+
+                const eta = estimateRemaining(job.status);
+                document.getElementById("job-eta").textContent = eta !== null ? t("eta", eta) : "";
+
+                if (job.status === "completed") {
+                    document.getElementById("job-spinner").style.display = "none";
+                    document.getElementById("job-progress-bar").style.width = "100%";
+                    document.getElementById("job-progress-bar").style.background = "#22c55e";
+                    document.getElementById("job-eta").textContent = "";
+                    document.getElementById("job-result").innerHTML = `
+                        <p class="status-success" style="margin-top: 0.75rem;">
+                            ${t("completeMsg", job.elapsed)}
+                        </p>
+                        <div class="cta-row">
+                            <a class="btn-secondary" href="/final" style="text-decoration:none;">${t("openProcessed")}</a>
+                            <button class="btn-secondary" onclick="openOutputFolder()">${t("openOutput")}</button>
+                            <button class="btn-secondary" onclick="resetForm()">${t("processAnother")}</button>
+                        </div>
+                    `;
+                    refreshJobsList();
+                    document.title = t("doneTitle");
+                    notifyCompletion("Your processed video is ready.");
+                    lastStage = null;
+                    return;
+                }
+
+                if (job.status === "failed") {
+                    document.getElementById("job-spinner").style.display = "none";
+                    document.getElementById("job-progress-bar").style.background = "#ef4444";
+                    document.getElementById("job-eta").textContent = "";
+                    document.getElementById("job-result").innerHTML = `
+                        <p class="status-error" style="margin-top: 0.75rem;">${job.error || t("processingFailed")}</p>
+                        <div class="cta-row">
+                            <button class="btn-secondary" onclick="retryJob('${jobId}')">${t("retry")}</button>
+                            <button class="btn-secondary" onclick="resetForm()">${t("startNew")}</button>
+                        </div>
+                    `;
+                    refreshJobsList();
+                    document.title = t("failedTitle");
+                    lastStage = null;
+                    return;
+                }
+
+                document.title = `${pct}% ${(t(`stage.${job.status}`) || STAGE_LABELS[job.status] || job.status)} - CleanVedio`;
+                setTimeout(() => pollJob(jobId), 2000);
+            } catch {
+                setTimeout(() => pollJob(jobId), 5000);
+            }
+        }
+
+        if ("Notification" in window && Notification.permission === "default") {
+            Notification.requestPermission();
+        }
+        function notifyCompletion(message) {
+            if ("Notification" in window && Notification.permission === "granted") {
+                new Notification("CleanVedio", { body: message });
+            }
+        }
+
+        async function retryJob(jobId) {
+            try {
+                const resp = await fetch(`/jobs/${jobId}/retry`, { method: "POST" });
+                const data = await resp.json();
+                if (!resp.ok || data.error) {
+                    showToast(data.error || t("retryFailed"), "error");
+                    return;
+                }
+                setProcessingState();
+                lastStage = null;
+                pollJob(data.job_id);
+                refreshJobsList();
+                showToast(t("retryStarted"), "success");
+            } catch (err) {
+                showToast(`${t("retryFailed")} ${err.message}`, "error");
+            }
+        }
+
+        async function openOutputFolder() {
+            try {
+                const resp = await fetch("/open-output-folder", { method: "POST" });
+                const data = await resp.json();
+                if (!resp.ok || data.error) {
+                    showToast(data.error || t("openOutputFailed"), "error");
+                    return;
+                }
+                showToast(t("openOutputOk"), "success");
+            } catch {
+                showToast(t("openOutputFailed"), "error");
+            }
+        }
+
+        function resetForm() {
+            document.getElementById("process-form").style.display = "block";
+            document.getElementById("job-panel").style.display = "none";
+            document.getElementById("submit-btn").disabled = false;
+            document.getElementById("submit-btn").textContent = t("submitIdle");
+            document.getElementById("job-spinner").style.display = "block";
+            document.getElementById("job-progress-bar").style.width = "0%";
+            document.getElementById("job-progress-bar").style.background = "linear-gradient(90deg, #3b82f6, #60a5fa)";
+            document.getElementById("job-result").innerHTML = "";
+            document.getElementById("job-eta").textContent = "";
+            document.title = ORIGINAL_TITLE;
+            clearErrors();
+            dropFile.style.display = "none";
+            lastStage = null;
+        }
+
+        async function refreshJobsList() {
+            try {
+                const resp = await fetch("/jobs");
+                const jobs = await resp.json();
+                const container = document.getElementById("jobs-container");
+                if (!jobs.length) {
+                    container.innerHTML = `<p style="color: #7f93b7; font-size: 0.82rem;">${t("noJobs")}</p>`;
+                    return;
+                }
+                container.innerHTML = jobs.map((j) => {
+                    let badge = "badge-queued";
+                    if (j.status === "completed") badge = "badge-completed";
+                    else if (j.status === "failed") badge = "badge-failed";
+                    else if (j.status !== "queued") badge = "badge-running";
+                    const name = j.filename.length > 46 ? `${j.filename.substring(0, 43)}...` : j.filename;
+                    const retryBtn = j.status === "failed"
+                        ? `<button class="badge badge-retry" onclick="event.stopPropagation(); retryJob('${j.job_id}')">${t("retry")}</button>`
+                        : "";
+                    return `<div class="job-item" onclick="viewJob('${j.job_id}')">
+                        <span title="${j.filename}">${name}</span>
+                        <span>
+                            ${retryBtn}
+                            <span class="badge ${badge}">${j.status}</span>
+                            <span style="color:#7890b8; margin-left:0.38rem;">${j.elapsed}s</span>
+                        </span>
+                    </div>`;
+                }).join("");
+            } catch {
+                showToast(t("noRefresh"), "error");
+            }
+        }
+
+        function viewJob(jobId) {
+            setProcessingState();
+            lastStage = null;
+            pollJob(jobId);
+        }
+
+        applyLanguage();
+        refreshJobsList();
+        setInterval(refreshJobsList, 10000);
+    </script>
+</body>
+</html>

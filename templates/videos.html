@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processed Videos - CleanVedio</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: radial-gradient(circle at top, #111f3e 0%, #0b1220 60%, #060a13 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        h1 {
+            text-align: center;
+            font-size: 1.95rem;
+            margin-bottom: 0.25rem;
+            color: #f8fafc;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 1.2rem;
+            font-size: 0.92rem;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .lang-btn {
+            color: #bfdbfe;
+            font-size: 0.87rem;
+            background: rgba(37, 99, 235, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.35);
+            border-radius: 999px;
+            padding: 0.4rem 0.85rem;
+            cursor: pointer;
+        }
+        .lang-btn:hover { background: rgba(37, 99, 235, 0.28); }
+
+        .nav a {
+            color: #bfdbfe;
+            text-decoration: none;
+            font-size: 0.87rem;
+            background: rgba(37, 99, 235, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.35);
+            border-radius: 999px;
+            padding: 0.4rem 0.85rem;
+        }
+
+        .nav a:hover { background: rgba(37, 99, 235, 0.28); }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: rgba(15, 23, 42, 0.85);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #2b3a55;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        }
+
+        .card video {
+            width: 100%;
+            display: block;
+            background: #000;
+        }
+
+        .thumb-wrap {
+            position: relative;
+            cursor: pointer;
+            background: #000;
+            aspect-ratio: 16/9;
+            overflow: hidden;
+        }
+
+        .thumb-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: opacity 0.2s;
+        }
+
+        .thumb-wrap:hover img { opacity: 0.8; }
+
+        .play-btn {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .play-btn svg {
+            width: 48px;
+            height: 48px;
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+            opacity: 0.85;
+            transition: opacity 0.15s, transform 0.15s;
+        }
+
+        .thumb-wrap:hover .play-btn svg {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .card-info {
+            padding: 12px 14px;
+        }
+
+        .card-name {
+            font-size: 0.85rem;
+            font-weight: 550;
+            color: #e2e8f0;
+            word-break: break-word;
+            margin-bottom: 4px;
+        }
+
+        .card-meta {
+            font-size: 0.75rem;
+            color: #64748b;
+            display: flex;
+            gap: 12px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            padding: 0 14px 12px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 7px 0;
+            border-radius: 6px;
+            border: 1px solid #475569;
+            background: #0d1830;
+            color: #c5d5ed;
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .btn:hover {
+            background: #1f2f4f;
+            color: #f1f5f9;
+        }
+
+        .btn-danger:hover {
+            background: #7f1d1d;
+            color: #f87171;
+            border-color: #991b1b;
+        }
+
+        .pagination {
+            margin-top: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pagination a, .pagination span {
+            display: inline-block;
+            min-width: 36px;
+            height: 36px;
+            line-height: 36px;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+
+        .pagination a {
+            background: #1e293b;
+            color: #cbd5e1;
+            border: 1px solid #334155;
+        }
+
+        .pagination a:hover { background: #334155; }
+
+        .pagination .current {
+            background: #3b82f6;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .pagination .disabled {
+            color: #475569;
+            pointer-events: none;
+        }
+
+        .empty {
+            text-align: center;
+            color: #8aa0c6;
+            font-size: 1.05rem;
+            margin-top: 72px;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid #2b3a55;
+            border-radius: 12px;
+            padding: 2rem 1rem;
+        }
+        .empty a {
+            display: inline-block;
+            margin-top: 0.75rem;
+            color: #93c5fd;
+            text-decoration: none;
+        }
+        .empty a:hover { text-decoration: underline; }
+
+        .confirm-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .confirm-overlay.active { display: flex; }
+
+        .confirm-box {
+            background: #1a2944;
+            border: 1px solid #3b4f72;
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 360px;
+            text-align: center;
+        }
+
+        .confirm-box p {
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+        }
+
+        .confirm-box .btn { flex: none; padding: 8px 20px; }
+        .delete-warning {
+            font-size: 0.78rem;
+            color: #fca5a5;
+            margin: -8px 0 16px;
+        }
+        .toast-wrap {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 999;
+        }
+        .toast {
+            min-width: 220px;
+            max-width: 340px;
+            padding: 0.7rem 0.8rem;
+            border-radius: 9px;
+            border: 1px solid #35507f;
+            background: #0c1f40;
+            color: #dbeafe;
+            font-size: 0.82rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        }
+        .toast.error {
+            border-color: #7f1d1d;
+            background: #3f1111;
+            color: #fecaca;
+        }
+        .toast.success {
+            border-color: #14532d;
+            background: #0f2c1a;
+            color: #bbf7d0;
+        }
+        body[dir="rtl"] .container {
+            direction: rtl;
+        }
+        body[dir="rtl"] .toast-wrap {
+            right: auto;
+            left: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CleanVedio</h1>
+        <p class="subtitle"><span id="subtitle-prefix">{{ total }} processed video{{ 's' if total != 1 }} ready</span></p>
+
+        <div class="nav">
+            <a href="/" id="nav-home">Home</a>
+            <a href="/final" id="nav-final">Processed Videos</a>
+            <button type="button" class="lang-btn" id="lang-toggle">العربية</button>
+        </div>
+
+        {% if videos %}
+        <div class="grid">
+            {% for video in videos %}
+            {% set video_url = url_for('static', filename='/' + video.name) %}
+            <div class="card" id="card-{{ loop.index }}">
+                <div class="thumb-wrap" onclick="playVideo(this, '{{ video_url }}')">
+                    <img src="{{ url_for('video_thumbnail', filename=video.name) }}" alt="{{ video.name }}" loading="lazy">
+                    <div class="play-btn">
+                        <svg viewBox="0 0 48 48" fill="white"><circle cx="24" cy="24" r="24" fill="rgba(0,0,0,0.45)"/><polygon points="18,14 36,24 18,34" fill="white"/></svg>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <div class="card-name">{{ video.name }}</div>
+                    <div class="card-meta">
+                        <span>{{ video.date }}</span>
+                        <span>{{ video.size }}</span>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <a class="btn btn-download" href="{{ video_url }}" download>Download</a>
+                    <button class="btn btn-danger btn-delete" onclick="confirmDelete('{{ video.name }}', 'card-{{ loop.index }}')">Delete</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if total_pages > 1 %}
+        <div class="pagination">
+            {% if page > 1 %}
+                <a href="?page={{ page - 1 }}">&laquo;</a>
+            {% else %}
+                <span class="disabled">&laquo;</span>
+            {% endif %}
+
+            {% for p in range(1, total_pages + 1) %}
+                {% if p == page %}
+                    <span class="current">{{ p }}</span>
+                {% elif p <= 2 or p > total_pages - 2 or (p >= page - 1 and p <= page + 1) %}
+                    <a href="?page={{ p }}">{{ p }}</a>
+                {% elif p == 3 and page > 4 %}
+                    <span class="disabled">&hellip;</span>
+                {% elif p == total_pages - 2 and page < total_pages - 3 %}
+                    <span class="disabled">&hellip;</span>
+                {% endif %}
+            {% endfor %}
+
+            {% if page < total_pages %}
+                <a href="?page={{ page + 1 }}">&raquo;</a>
+            {% else %}
+                <span class="disabled">&raquo;</span>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% else %}
+        <div class="empty">
+            <span id="empty-title">No videos yet.</span>
+            <br>
+            <a href="/" id="empty-link">Start your first clean video</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="confirm-overlay" id="delete-confirm">
+        <div class="confirm-box">
+            <p id="delete-title">Delete <strong id="delete-name"></strong>?</p>
+            <p class="delete-warning" id="delete-warning">This action cannot be undone.</p>
+            <div style="display:flex; gap:8px; justify-content:center;">
+                <button class="btn" id="delete-cancel" onclick="closeConfirm()">Cancel</button>
+                <button class="btn btn-danger" id="delete-yes">Delete</button>
+            </div>
+        </div>
+    </div>
+    <div class="toast-wrap" id="toast-wrap"></div>
+
+    <script>
+        const I18N = {
+            en: {
+                title: "Processed Videos - CleanVedio",
+                subtitle: "{{ total }} processed video{{ 's' if total != 1 }} ready",
+                home: "Home",
+                final: "Processed Videos",
+                langButton: "العربية",
+                download: "Download",
+                delete: "Delete",
+                emptyTitle: "No videos yet.",
+                emptyLink: "Start your first clean video",
+                deleteTitlePrefix: "Delete",
+                deleteWarning: "This action cannot be undone.",
+                cancel: "Cancel",
+                deleteFailed: "Delete failed.",
+                deleted: "Video deleted.",
+            },
+            ar: {
+                title: "الفيديوهات المعالجة - CleanVedio",
+                subtitle: "{{ total }} فيديو{{ 'هات' if total != 1 else '' }} معالجة جاهزة",
+                home: "الرئيسية",
+                final: "الفيديوهات المعالجة",
+                langButton: "English",
+                download: "تنزيل",
+                delete: "حذف",
+                emptyTitle: "لا توجد فيديوهات بعد.",
+                emptyLink: "ابدأ أول فيديو نظيف",
+                deleteTitlePrefix: "حذف",
+                deleteWarning: "لا يمكن التراجع عن هذا الإجراء.",
+                cancel: "إلغاء",
+                deleteFailed: "فشل الحذف.",
+                deleted: "تم حذف الفيديو.",
+            },
+        };
+
+        let currentLang = localStorage.getItem("cleanvedio_lang") || "en";
+
+        function applyLanguage() {
+            const dict = I18N[currentLang] || I18N.en;
+            document.documentElement.lang = currentLang === "ar" ? "ar" : "en";
+            document.body.dir = currentLang === "ar" ? "rtl" : "ltr";
+            document.title = dict.title;
+            document.getElementById("subtitle-prefix").textContent = dict.subtitle;
+            document.getElementById("nav-home").textContent = dict.home;
+            document.getElementById("nav-final").textContent = dict.final;
+            document.getElementById("lang-toggle").textContent = dict.langButton;
+            const emptyTitle = document.getElementById("empty-title");
+            const emptyLink = document.getElementById("empty-link");
+            if (emptyTitle) emptyTitle.textContent = dict.emptyTitle;
+            if (emptyLink) emptyLink.textContent = dict.emptyLink;
+            document.getElementById("delete-warning").textContent = dict.deleteWarning;
+            document.getElementById("delete-cancel").textContent = dict.cancel;
+            document.getElementById("delete-yes").textContent = dict.delete;
+            document.querySelectorAll(".btn-download").forEach((el) => { el.textContent = dict.download; });
+            document.querySelectorAll(".btn-delete").forEach((el) => { el.textContent = dict.delete; });
+        }
+
+        document.getElementById("lang-toggle").addEventListener("click", () => {
+            currentLang = currentLang === "en" ? "ar" : "en";
+            localStorage.setItem("cleanvedio_lang", currentLang);
+            applyLanguage();
+        });
+
+        function showToast(message, type = "info") {
+            const wrap = document.getElementById("toast-wrap");
+            const toast = document.createElement("div");
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            wrap.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+
+        function playVideo(thumbWrap, videoSrc) {
+            const video = document.createElement('video');
+            video.controls = true;
+            video.autoplay = true;
+            video.style.width = '100%';
+            video.style.display = 'block';
+            video.style.background = '#000';
+            video.innerHTML = `<source src="${videoSrc}" type="video/mp4">`;
+            thumbWrap.replaceWith(video);
+        }
+
+        let pendingFile = null, pendingCard = null;
+
+        function confirmDelete(filename, cardId) {
+            pendingFile = filename;
+            pendingCard = cardId;
+            document.getElementById('delete-name').textContent = filename;
+            const dict = I18N[currentLang] || I18N.en;
+            document.getElementById("delete-title").innerHTML = `${dict.deleteTitlePrefix} <strong id="delete-name">${filename}</strong>?`;
+            document.getElementById('delete-confirm').classList.add('active');
+        }
+
+        function closeConfirm() {
+            document.getElementById('delete-confirm').classList.remove('active');
+        }
+
+        document.getElementById('delete-yes').addEventListener('click', async () => {
+            closeConfirm();
+            try {
+                const resp = await fetch('/final/' + encodeURIComponent(pendingFile), { method: 'DELETE' });
+                if (resp.ok) {
+                    const card = document.getElementById(pendingCard);
+                    card.style.transition = 'opacity 0.3s';
+                    card.style.opacity = '0';
+                    setTimeout(() => card.remove(), 300);
+                    showToast((I18N[currentLang] || I18N.en).deleted, "success");
+                } else {
+                    showToast((I18N[currentLang] || I18N.en).deleteFailed, "error");
+                }
+            } catch {
+                showToast((I18N[currentLang] || I18N.en).deleteFailed, "error");
+            }
+        });
+
+        applyLanguage();
+    </script>
+</body>
+</html>
